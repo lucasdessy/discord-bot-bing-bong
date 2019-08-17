@@ -8,35 +8,45 @@ client.on('ready', () =>{
 
 const prefix = 'bong_'
 var bing_bong = ['bing', 'bong'];
-var ativado = 1;
-//var admin_id = 342663595626201089;
+var proibido = 1;
+var admin_id = 342663595626201089;
 client.on('message', (message) =>{
 
     if (message.author.bot) return;
     mencao = message.mentions.users.first();
     //if (message.author.id == admin_id){
     if (message.member.roles.some(role => role.hasPermission("ADMINISTRATOR"))){
+        
+        msg = message.content.toLowerCase;
 
-
-        if(message.content.startsWith(prefix)){
-            if((message.content.startsWith(prefix+'start')) && (mencao != null)){
-                ativado = 0;
+        if(msg.startsWith(prefix)){
+            if((msg.startsWith(prefix+'start')) && (mencao != null)){
+                proibido = 0;
                 user_id = mencao.id;
                 message.channel.send('Bong startado para o usuario com o id: '+mencao.id);        
             }
-            else if(message.content == prefix+'stop'){
-                ativado = 1;
+            else if (msg == prefix+'start'){
+                message.channel.send('Erro: precisa @mencionar usuário.');
+            }            
+            else if(msg == prefix+'stop'){
+                proibido = 1;
                 message.channel.send('Bong parado.');
             }
+            else if(msg == prefix+'status' && mencao != null){
+                message.channel.send('Bong startado para o usuario com o id: '+mencao.id);
+            }
+            else if(msg == prefix+'status' && mencao == null){
+                message.channel.send('Bong está parado.')
+            }
             else{
-                message.channel.send('Erro: precisa @mencionar usuário.');
+                message.channel.send('Erro: comando não encontrado.');
             }
         }
 
         
     }
 
-    if (ativado == 0){
+    if (proibido == 0){
         if(message.author.id == user_id){
 
             var respostas = '';
@@ -47,7 +57,7 @@ client.on('message', (message) =>{
 
         }
 
-        if(message.content == 'bing' || message.content == 'bong'){
+        if(msg == 'bing' || msg == 'bong'){
             message.channel.send('go green');
         }
     }
